@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.microslt.parseapp.adapters.RegistrationListAdapter;
@@ -57,7 +56,18 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        getRegistrationId();
+    }
+
+    @Override
     public void onRefresh() {
+        getRegistrationId();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void getRegistrationId() {
         mRegisteredID = JPushInterface.getRegistrationID(getApplicationContext());
         ParseQuery<ParseObject> q = ParseQuery.getQuery("UserID");
         q.selectKeys(Arrays.asList("registration_id"));
@@ -65,7 +75,6 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
 
             @Override
             public void done(List<ParseObject> posts, ParseException e) {
-                String strMessage = "";
                 if (e == null) {
                     List<ListData> data = new ArrayList<>();
                     List<String> postTexts = new ArrayList<String>();
@@ -77,14 +86,10 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
                         current.title = g;
                         data.add(current);
                     }
-
                     mAdapter.setListRegistration(data);
                 }
-
             }
         });
-
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
