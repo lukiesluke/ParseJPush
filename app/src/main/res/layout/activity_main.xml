@@ -1,89 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.microslt.parseapp.MainActivity">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dip">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_regId"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dip" />
+            android:orientation="vertical"
+            android:padding="8dip">
 
-        <TextView
-            android:id="@+id/tv_appkey"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip" />
+            <TextView
+                android:id="@+id/tv_regId"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip" />
 
-        <TextView
-            android:id="@+id/tv_package"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip" />
+            <TextView
+                android:id="@+id/tv_device_id"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip" />
 
-        <TextView
-            android:id="@+id/tv_imei"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip" />
+            <TextView
+                android:id="@+id/tv_appkey"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip" />
 
-        <TextView
-            android:id="@+id/tv_device_id"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip" />
+            <TextView
+                android:id="@+id/tv_package"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip" />
 
-        <TextView
-            android:id="@+id/tv_version"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip" />
+            <TextView
+                android:id="@+id/tv_imei"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip" />
 
-        <Button
-            android:id="@+id/init"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip"
-            android:text="initPush" />
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip" />
 
-        <Button
-            android:id="@+id/stopPush"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip"
-            android:text="stopPush" />
+            <Button
+                android:id="@+id/init"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:text="initPush" />
 
-        <Button
-            android:id="@+id/resumePush"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip"
-            android:text="resumePush" />
+            <Button
+                android:id="@+id/stopPush"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:text="stopPush" />
 
-        <Button
-            android:id="@+id/getRegistrationId"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip"
-            android:text="get_Registration_Id" />
+            <Button
+                android:id="@+id/resumePush"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:text="resumePush" />
 
-        <EditText
-            android:id="@+id/msg_rec"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dip"
-            android:visibility="invisible" />
+            <Button
+                android:id="@+id/getRegistrationId"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:text="get_Registration_Id" />
 
+            <Button
+                android:id="@+id/btn_send_push"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:text="Send Push to Parse Server" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/btn_get_object_data"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:text="Get Data" />
 
-</android.support.constraint.ConstraintLayout>
+            <EditText
+                android:id="@+id/msg_rec"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:text="test"
+                android:textColor="@color/colorAccent"
+                android:visibility="invisible" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

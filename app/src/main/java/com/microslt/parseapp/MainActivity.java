@@ -13,12 +13,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import cn.jpush.android.api.JPushInterface;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button mInit;
-    private Button mSetting;
+    private Button mInit, btn_get_object_data;
+    private Button btn_send_push;
     private Button mStopPush;
     private Button mResumePush;
     private Button mGetRid;
@@ -32,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
     public static boolean isForeground = false;
+    private String mRegisteredID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +87,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mGetRid = (Button) findViewById(R.id.getRegistrationId);
         mGetRid.setOnClickListener(this);
+
+        btn_send_push = (Button) findViewById(R.id.btn_send_push);
+        btn_send_push.setOnClickListener(this);
+
+        btn_get_object_data = (Button) findViewById(R.id.btn_get_object_data);
+        btn_get_object_data.setOnClickListener(this);
 
         msgText = (EditText) findViewById(R.id.msg_rec);
     }
@@ -127,14 +143,87 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.resumePush:
                 JPushInterface.resumePush(getApplicationContext());
                 break;
+            case R.id.btn_send_push:
+//                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//                    installation.put("JPushRegistrationID", rid);
+//                    installation.saveInBackground();
+                break;
+            case R.id.btn_get_object_data:
+
+//                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("GameScore");
+//                query.findInBackground(new FindCallback<ParseObject>() {
+//                    public void done(List<ParseObject> markers, ParseException e) {
+//                        if (e == null) {
+//                            // your logic here
+//                            Gson gson = new Gson();
+//                            String r = gson.toJson(markers);
+//                            Log.d("m", "not failed: " + r);
+//                        } else {
+//                            // handle Parse Exception here
+//                            Log.d("m", "failed");
+//                        }
+//                    }
+//                });
+                getRegistrationID();
+                ParseQuery<ParseObject> q = ParseQuery.getQuery("UserID");
+                q.selectKeys(Arrays.asList("registration_id"));
+                q.findInBackground(new FindCallback<ParseObject>() {
+
+                    @Override
+                    public void done(List<ParseObject> posts, ParseException e) {
+                        int i = 0;
+                        String strMessage = "";
+                        if (e == null) {
+                            List<String> postTexts = new ArrayList<String>();
+                            for (ParseObject post : posts) {
+
+                                String g = post.getString("registration_id");
+                                postTexts.add(g);
+
+                                if (g != null) {
+                                    if (g.equalsIgnoreCase(mRegisteredID)) {
+                                        i++;
+                                    }
+                                }
+                            }
+
+                            if (i < 1) {
+                                setRegistrationID();
+                                strMessage = "Device registration successfully";
+                            } else {
+                                strMessage = "Your device ID is already registered";
+                            }
+
+                            Toast.makeText(MainActivity.this, "Duplicates: " + i + "\n" + strMessage + "\n" + postTexts.toString(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "query error: " + e, Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                });
+
+                break;
             case R.id.getRegistrationId:
-                String rid = JPushInterface.getRegistrationID(getApplicationContext());
-                if (!rid.isEmpty()) {
-                    mRegId.setText("RegId:" + rid);
+
+                if (!mRegisteredID.isEmpty()) {
+                    mRegId.setText("RegId:" + mRegisteredID);
                 } else {
                     Toast.makeText(this, "Get registration fail, JPush init failed!", Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    private void getRegistrationID() {
+        mRegisteredID = JPushInterface.getRegistrationID(getApplicationContext());
+    }
+
+    private void setRegistrationID() {
+        if (mRegisteredID.length() > 0 && !mRegisteredID.isEmpty()) {
+            ParseObject user = new ParseObject("UserID");
+            user.put("registration_id", mRegisteredID);
+            user.saveInBackground();
         }
     }
 

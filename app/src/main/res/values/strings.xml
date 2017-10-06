@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ParseJPush</string>
+    <string name="parse_server_url">http://192.168.3.100:1337/parse</string>
+    <string name="parse_app_id">my-parse-server</string>
 </resources>
