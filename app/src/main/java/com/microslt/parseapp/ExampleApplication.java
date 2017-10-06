@@ -1,6 +1,9 @@
 package com.microslt.parseapp;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.parse.Parse;
 
@@ -30,5 +33,23 @@ public class ExampleApplication extends Application {
 
         JPushInterface.setDebugMode(true);    // 设置开启日志,发布时请关闭日志
         JPushInterface.init(this);            // 初始化 JPush
+    }
+
+    public static void saveToPreferences(Context context, String preferenceName, String preferenceValue) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(preferenceName, preferenceValue);
+        editor.apply();
+    }
+
+    public static String readFromPreferences(Context context, String preferenceName, String defaultValue) {
+        String strSharedPreferences = "";
+        try {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            strSharedPreferences = sharedPreferences.getString(preferenceName, defaultValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strSharedPreferences;
     }
 }

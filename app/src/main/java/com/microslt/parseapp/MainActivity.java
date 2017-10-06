@@ -176,10 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (e == null) {
                             List<String> postTexts = new ArrayList<String>();
                             for (ParseObject post : posts) {
-
                                 String g = post.getString("registration_id");
                                 postTexts.add(g);
-
                                 if (g != null) {
                                     if (g.equalsIgnoreCase(mRegisteredID)) {
                                         i++;
@@ -202,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
-
+                startActivity(new Intent(this, ListRegisteredID.class));
                 break;
             case R.id.getRegistrationId:
 
