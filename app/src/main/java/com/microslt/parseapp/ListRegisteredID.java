@@ -7,23 +7,28 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.microslt.parseapp.adapters.RegistrationListAdapter;
 import com.microslt.parseapp.callbacks.RegistrationIdLoadedListener;
 import com.microslt.parseapp.model.ListData;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, RegistrationIdLoadedListener {
+public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, RegistrationIdLoadedListener, RegistrationListAdapter.ClickListener {
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RegistrationListAdapter mAdapter;
@@ -45,8 +50,8 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
         mRecyclerView = (RecyclerView) findViewById(R.id.drawerList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(ListRegisteredID.this));
         mAdapter = new RegistrationListAdapter(ListRegisteredID.this);
+        mAdapter.setClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
-
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -97,5 +102,31 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
         Gson gson = new Gson();
         Log.d("lwg", gson.toJson(response));
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+
+    @Override
+    public void itemClicked(View view, String registeredId) {
+        Toast.makeText(this, registeredId, Toast.LENGTH_SHORT).show();
+        String[] registrationIDs = {registeredId, "sdsdsdsd"};
+        Gson gson = new Gson();
+        String t = gson.toJson(registrationIDs);
+
+        Log.d("LWG", "test " + t);
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("registrationIDs", registeredId);
+        params.put("title", "Title " + registeredId);
+        params.put("message", "Message Body " + registeredId);
+
+        ParseCloud.callFunctionInBackground("sendNotifications", params, new FunctionCallback<HashMap>() {
+            public void done(HashMap objec, ParseException e) {
+                if (e == null) {
+                    // ratings is 4.5
+                    Log.d("LWG", "Good " + objec.toString());
+                } else
+                    Log.d("LWG", "Error: " + e + "");
+            }
+        });
     }
 }

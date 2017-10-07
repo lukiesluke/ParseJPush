@@ -21,6 +21,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
     private LayoutInflater layoutInflater;
     List<ListData> listData = new ArrayList<>();
     public static Context context;
+    private ClickListener clickListener;
 
     public RegistrationListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
@@ -50,6 +51,10 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
         return listData.size();
     }
 
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
 
@@ -61,7 +66,13 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<RegistrationLi
 
         @Override
         public void onClick(View view) {
-
+            if (clickListener != null) {
+                clickListener.itemClicked(view, title.getText().toString());
+            }
         }
+    }
+
+    public interface ClickListener {
+        public void itemClicked(View view, String registeredId);
     }
 }

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -144,9 +146,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 JPushInterface.resumePush(getApplicationContext());
                 break;
             case R.id.btn_send_push:
-//                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-//                    installation.put("JPushRegistrationID", rid);
-//                    installation.saveInBackground();
+                mRegisteredID = JPushInterface.getRegistrationID(getApplicationContext());
+
+                if (!mRegisteredID.isEmpty()) {
+                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                    installation.put("JPushRegistrationID", mRegisteredID);
+                    installation.saveInBackground();
+                }else{
+                    Toast.makeText(MainActivity.this, "Failed to get Reg ID", Toast.LENGTH_LONG).show();
+                }
+
                 break;
             case R.id.btn_get_object_data:
 
@@ -215,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getRegistrationID() {
         mRegisteredID = JPushInterface.getRegistrationID(getApplicationContext());
+        Log.d("LWG", mRegisteredID);
     }
 
     private void setRegistrationID() {
