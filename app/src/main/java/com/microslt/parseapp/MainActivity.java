@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
     public static boolean isForeground = false;
-    private String mRegisteredID;
+    private String mRegisteredID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                     installation.put("JPushRegistrationID", mRegisteredID);
                     installation.saveInBackground();
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, "Failed to get Reg ID", Toast.LENGTH_LONG).show();
                 }
 
