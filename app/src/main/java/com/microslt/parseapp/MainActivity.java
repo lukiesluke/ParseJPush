@@ -152,34 +152,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                     installation.put("JPushRegistrationID", mRegisteredID);
                     installation.saveInBackground();
+
                 } else {
                     Toast.makeText(MainActivity.this, "Failed to get Reg ID", Toast.LENGTH_LONG).show();
                 }
 
-                break;
-            case R.id.btn_get_object_data:
-
-//                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("GameScore");
-//                query.findInBackground(new FindCallback<ParseObject>() {
-//                    public void done(List<ParseObject> markers, ParseException e) {
-//                        if (e == null) {
-//                            // your logic here
-//                            Gson gson = new Gson();
-//                            String r = gson.toJson(markers);
-//                            Log.d("m", "not failed: " + r);
-//                        } else {
-//                            // handle Parse Exception here
-//                            Log.d("m", "failed");
-//                        }
-//                    }
-//                });
-                getRegistrationID();
                 ParseQuery<ParseObject> q = ParseQuery.getQuery("UserID");
                 q.selectKeys(Arrays.asList("registration_id"));
                 q.findInBackground(new FindCallback<ParseObject>() {
 
                     @Override
                     public void done(List<ParseObject> posts, ParseException e) {
+
+                        Log.d("LWG", "ParseQuery<ParseObject> q = ParseQuery.getQuery(\"UserID\");");
                         int i = 0;
                         String strMessage = "";
                         if (e == null) {
@@ -209,6 +194,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
+
+                break;
+            case R.id.btn_get_object_data:
                 startActivity(new Intent(this, ListRegisteredID.class));
                 break;
             case R.id.getRegistrationId:

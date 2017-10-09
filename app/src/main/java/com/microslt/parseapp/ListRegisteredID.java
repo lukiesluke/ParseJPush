@@ -117,7 +117,7 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("registrationIDs", registeredId);
         params.put("title", "Title " + registeredId);
-        params.put("message", "Message Body " + registeredId);
+        params.put("alert", "Message Body " + registeredId);
 
         ParseCloud.callFunctionInBackground("sendNotifications", params, new FunctionCallback<HashMap>() {
             public void done(HashMap objec, ParseException e) {
