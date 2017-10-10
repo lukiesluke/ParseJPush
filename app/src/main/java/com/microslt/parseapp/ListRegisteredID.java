@@ -1,6 +1,7 @@
 package com.microslt.parseapp;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +41,8 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
         return data;
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,7 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(ListRegisteredID.this));
+
 
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -44,6 +45,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String KEY_EXTRAS = "extras";
     public static boolean isForeground = false;
     private String mRegisteredID = "";
+
+    static final int POLL_INTERVAL = 5000; // milliseconds
+    Handler myHandler = new Handler();  // android.os.Handler
+    Runnable mRefreshMessagesRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Toast.makeText(MainActivity.this, "Boom!", Toast.LENGTH_LONG).show();
+            myHandler.postDelayed(this, POLL_INTERVAL);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, ListRegisteredID.class));
                 break;
             case R.id.getRegistrationId:
-
+                mRegisteredID = JPushInterface.getRegistrationID(getApplicationContext());
+                //myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
                 if (!mRegisteredID.isEmpty()) {
                     mRegId.setText("RegId:" + mRegisteredID);
                 } else {
