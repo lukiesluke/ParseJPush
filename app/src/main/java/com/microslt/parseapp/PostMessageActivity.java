@@ -14,23 +14,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.microslt.parseapp.model.TagData;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 
 import activehashtag.ActiveHashTag;
 
 public class PostMessageActivity extends AppCompatActivity implements ActiveHashTag.OnHashTagClickListener {
-    private EditText editText;
+    private EditText editText, edtxtUserId;
     private TextView textView;
     private TextView textViewResHash;
     private Button button;
     private Activity activity;
+    private Toolbar mToolbar;
 
+    private String mRegistartionID = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +44,19 @@ public class PostMessageActivity extends AppCompatActivity implements ActiveHash
         setSupportActionBar(toolbar);
 
         editText = (EditText) findViewById(R.id.activity_edittext);
+        edtxtUserId = (EditText) findViewById(R.id.edtxt_userId);
         textView = (TextView) findViewById(R.id.activity_textview);
         textViewResHash = (TextView) findViewById(R.id.activity_textview_hashtag);
         button = (Button) findViewById(R.id.activity_btn);
+
+        editText.requestFocus();
+
+        mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        mRegistartionID = ExampleApplication.readFromPreferences(PostMessageActivity.this, TagData.REGISTRATION_ID, "NULL");
+        mToolbar.setTitle(mRegistartionID);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         char[] additionalSymbols = new char[]{'_'};
         final ActiveHashTag editTextTag = ActiveHashTag.Factory.create(ResourcesCompat.getColor(this.getResources(), android.R.color.holo_blue_dark, null), null, additionalSymbols);
@@ -71,19 +84,20 @@ public class PostMessageActivity extends AppCompatActivity implements ActiveHash
                     textViewResHash.append(crehash);
                     System.out.println("###: STR::: " + crehash);
 
-                    ParseObject saveHashTag = new ParseObject("HashTag");
-                    saveHashTag.put("registrationId", 1338);
-                    saveHashTag.put("username", "Luke");
-                    saveHashTag.put("hashTag", crehash);
-                    saveHashTag.put("hashTagString", s);
-                    saveHashTag.saveEventually(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
+                    final HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("registrationId", mRegistartionID);
+                    params.put("username", edtxtUserId.getText().toString().trim());
+                    params.put("hashTag", crehash);
+                    params.put("hashTagString", s);
+
+                    ParseCloud.callFunctionInBackground("HashTag", params, new FunctionCallback<HashMap>() {
+                        public void done(HashMap objec, ParseException e) {
                             if (e == null) {
                                 // ratings is 4.5
-                                Log.d("LWG", "saveHashTag Good ");
+                                Log.d("LWG", "Good " + objec.toString());
                             } else {
-                                Log.d("LWG", "saveHashTag Error: " + e);
+                                Log.d("LWG", "Error: " + e + "");
+                                saveHash(params.get("hashTag"), params.get("hashTagString"));
                             }
                         }
                     });
@@ -92,8 +106,8 @@ public class PostMessageActivity extends AppCompatActivity implements ActiveHash
                 textView.setText(resString);
 
                 ParseObject postMessage = new ParseObject("PostMessages");
-                postMessage.put("registrationId", 1338);
-                postMessage.put("username", "Luke");
+                postMessage.put("registrationId", mRegistartionID);
+                postMessage.put("username", edtxtUserId.getText().toString().trim());
                 postMessage.put("messages", editText.getText().toString().trim());
                 postMessage.saveEventually(new SaveCallback() {
                     @Override
@@ -106,6 +120,25 @@ public class PostMessageActivity extends AppCompatActivity implements ActiveHash
                         }
                     }
                 });
+            }
+        });
+    }
+
+    private void saveHash(String crehash, String s) {
+        ParseObject saveHashTag = new ParseObject("HashTag");
+        saveHashTag.put("registrationId", mRegistartionID);
+        saveHashTag.put("username", edtxtUserId.getText().toString().trim());
+        saveHashTag.put("hashTag", crehash);
+        saveHashTag.put("hashTagString", s);
+        saveHashTag.saveEventually(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    // ratings is 4.5
+                    Log.d("LWG", "saveHashTag Good ");
+                } else {
+                    Log.d("LWG", "saveHashTag Error: " + e);
+                }
             }
         });
     }

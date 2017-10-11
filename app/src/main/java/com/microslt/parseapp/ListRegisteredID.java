@@ -37,7 +37,6 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
 
     public static List<ListData> getData() {
         List<ListData> data = new ArrayList<>();
-
         return data;
     }
 

@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.microslt.parseapp.model.TagData;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -164,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDrawerLayout.closeDrawer(GravityCompat.START);
 
         if (selectedId == R.id.action_home) {
-            Toast.makeText(MainActivity.this, "action_home", Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, PostMessageActivity.class));
         }
 
@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         isForeground = true;
+        getRegistrationID();
         super.onResume();
     }
 
@@ -295,6 +296,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getRegistrationID() {
         mRegisteredID = JPushInterface.getRegistrationID(getApplicationContext());
+        ExampleApplication.saveToPreferences(this, TagData.REGISTRATION_ID, mRegisteredID);
         Log.d("LWG", mRegisteredID);
     }
 

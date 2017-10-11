@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <EditText
+        android:id="@+id/edtxt_userId"
+        android:layout_width="match_parent"
+        android:text="luke"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_bar" />
+
     <EditText
         android:id="@+id/activity_edittext"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:layout_below="@+id/edtxt_userId" />
 
     <Button
         android:id="@+id/activity_btn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="PUSH - GET ALL HASHTAG"
-        android:layout_below="@+id/activity_edittext"/>
+        android:layout_below="@+id/activity_edittext"
+        android:text="PUSH - GET ALL HASHTAG" />
 
     <TextView
         android:id="@+id/activity_textview"
@@ -22,7 +40,7 @@
         android:layout_height="100dp"
         android:layout_below="@+id/activity_btn"
         android:background="@android:color/holo_orange_light"
-        android:gravity="left|center_horizontal"/>
+        android:gravity="left|center_horizontal" />
 
     <TextView
         android:id="@+id/activity_textview_hashtag"
@@ -30,6 +48,6 @@
         android:layout_height="100dp"
         android:layout_below="@+id/activity_textview"
         android:background="@android:color/holo_green_light"
-        android:gravity="left|center_horizontal"/>
+        android:gravity="left|center_horizontal" />
 
 </RelativeLayout>
