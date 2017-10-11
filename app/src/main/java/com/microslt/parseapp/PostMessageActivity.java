@@ -6,12 +6,20 @@ import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import activehashtag.ActiveHashTag;
 
@@ -64,6 +72,25 @@ public class PostMessageActivity extends AppCompatActivity implements ActiveHash
                 }
 
                 textView.setText(resString);
+                List<String> str = new ArrayList<String>();
+                str.add("aaa");
+                str.add("Bessst");
+                str.add("Bean");
+
+                ParseObject gameScore = new ParseObject("PostMessages");
+                gameScore.put("score", 1337);
+                gameScore.put("playerName", "Sean Plott");
+                gameScore.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            // ratings is 4.5
+                            Log.d("LWG", "Good " + e);
+                        } else {
+                            Log.d("LWG", "Error: " + e);
+                        }
+                    }
+                });
 
             }
         });

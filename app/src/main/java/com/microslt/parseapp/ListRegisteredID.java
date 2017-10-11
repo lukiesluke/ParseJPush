@@ -128,8 +128,9 @@ public class ListRegisteredID extends AppCompatActivity implements SwipeRefreshL
                 if (e == null) {
                     // ratings is 4.5
                     Log.d("LWG", "Good " + objec.toString());
-                } else
+                } else {
                     Log.d("LWG", "Error: " + e + "");
+                }
             }
         });
     }
