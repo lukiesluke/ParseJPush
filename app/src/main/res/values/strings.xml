@@ -3,4 +3,9 @@
     <string name="parse_server_url">http://192.168.3.108:1337/parse</string>
     <string name="parse_app_id">my-app-id</string>
     <string name="title_activity_list_registered_id">master-key</string>
+    <string name="post_message">Post Message</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="registration">List Registration IDs</string>
+    <string name="title_activity_post_message">PostMessageActivity</string>
 </resources>

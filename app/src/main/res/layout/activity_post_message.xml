@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/activity_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <Button
+        android:id="@+id/activity_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="PUSH - GET ALL HASHTAG"
+        android:layout_below="@+id/activity_edittext"/>
+
+    <TextView
+        android:id="@+id/activity_textview"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/activity_btn"
+        android:background="@android:color/holo_orange_light"
+        android:gravity="left|center_horizontal"/>
+
+    <TextView
+        android:id="@+id/activity_textview_hashtag"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/activity_textview"
+        android:background="@android:color/holo_green_light"
+        android:gravity="left|center_horizontal"/>
+
+</RelativeLayout>

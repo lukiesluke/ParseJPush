@@ -4,11 +4,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,9 +35,14 @@ import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+    private static final String SELECTED_ITEM_ID = "selected_item_id";
+    private NavigationView mDrawer;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private Toolbar mToolbar;
 
-    private Button mInit, btn_get_object_data;
+    private Button mInit;
     private Button btn_send_push;
     private Button mStopPush;
     private Button mResumePush;
@@ -45,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String KEY_EXTRAS = "extras";
     public static boolean isForeground = false;
     private String mRegisteredID = "";
+    private int mSelectedId;
 
     static final int POLL_INTERVAL = 5000; // milliseconds
     Handler myHandler = new Handler();  // android.os.Handler
@@ -60,8 +74,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = (NavigationView) findViewById(R.id.main_drawer);
+        mDrawer.setNavigationItemSelectedListener(this);
+        mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+
+        mDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, mDrawerLayout, mToolbar, R.string.open, R.string.close) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                //hideScreenKeyboard();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+        };
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+
         initView();
         registerMessageReceiver();  // used for receive msg
+
+        if (savedInstanceState != null) {
+            mSelectedId = savedInstanceState.getInt(SELECTED_ITEM_ID);
+            navigate(mSelectedId);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_ITEM_ID, mSelectedId);
     }
 
     private void initView() {
@@ -104,9 +151,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_send_push = (Button) findViewById(R.id.btn_send_push);
         btn_send_push.setOnClickListener(this);
 
-        btn_get_object_data = (Button) findViewById(R.id.btn_get_object_data);
-        btn_get_object_data.setOnClickListener(this);
-
         msgText = (EditText) findViewById(R.id.msg_rec);
     }
 
@@ -115,6 +159,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         JPushInterface.init(getApplicationContext());
     }
 
+
+    public void navigate(int selectedId) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+
+        if (selectedId == R.id.action_home) {
+            Toast.makeText(MainActivity.this, "action_home", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, PostMessageActivity.class));
+        }
+
+        if (selectedId == R.id.action_registrationId) {
+            startActivity(new Intent(this, ListRegisteredID.class));
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        item.setCheckable(true);
+        if (item.getItemId() != mSelectedId) {
+            navigate(item.getItemId());
+        } else {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        return false;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
     @Override
     protected void onResume() {
@@ -206,9 +280,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-                break;
-            case R.id.btn_get_object_data:
-                startActivity(new Intent(this, ListRegisteredID.class));
                 break;
             case R.id.getRegistrationId:
                 mRegisteredID = JPushInterface.getRegistrationID(getApplicationContext());
