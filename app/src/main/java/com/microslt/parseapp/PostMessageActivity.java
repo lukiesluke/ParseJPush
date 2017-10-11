@@ -19,6 +19,7 @@ import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import activehashtag.ActiveHashTag;
@@ -69,28 +70,43 @@ public class PostMessageActivity extends AppCompatActivity implements ActiveHash
                     String crehash = "#" + s + " ";
                     textViewResHash.append(crehash);
                     System.out.println("###: STR::: " + crehash);
+
+                    ParseObject saveHashTag = new ParseObject("HashTag");
+                    saveHashTag.put("registrationId", 1338);
+                    saveHashTag.put("username", "Luke");
+                    saveHashTag.put("hashTag", crehash);
+                    saveHashTag.put("hashTagString", s);
+                    saveHashTag.saveEventually(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                // ratings is 4.5
+                                Log.d("LWG", "saveHashTag Good ");
+                            } else {
+                                Log.d("LWG", "saveHashTag Error: " + e);
+                            }
+                        }
+                    });
                 }
 
                 textView.setText(resString);
-                List<String> str = new ArrayList<String>();
-                str.add("aaa");
-                str.add("Bessst");
-                str.add("Bean");
 
-                ParseObject gameScore = new ParseObject("PostMessages");
-                gameScore.put("score", 1337);
-                gameScore.put("playerName", "Sean Plott");
-                gameScore.saveInBackground(new SaveCallback() {
+                ParseObject postMessage = new ParseObject("PostMessages");
+                postMessage.put("registrationId", 1338);
+                postMessage.put("username", "Luke");
+                postMessage.put("messages", editText.getText().toString().trim());
+                postMessage.saveEventually(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
                             // ratings is 4.5
-                            Log.d("LWG", "Good " + e);
+                            Log.d("LWG", "postMessage Good ");
                         } else {
-                            Log.d("LWG", "Error: " + e);
+                            Log.d("LWG", "postMessage Error: " + e);
                         }
                     }
                 });
+
 
             }
         });
