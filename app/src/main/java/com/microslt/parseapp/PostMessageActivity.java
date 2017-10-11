@@ -106,8 +106,6 @@ public class PostMessageActivity extends AppCompatActivity implements ActiveHash
                         }
                     }
                 });
-
-
             }
         });
     }
